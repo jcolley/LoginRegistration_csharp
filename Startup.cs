@@ -1,9 +1,11 @@
 using System;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace validatingFormSubmission
+namespace LoginRegistration
 {
     public class Startup
     {
@@ -13,6 +15,8 @@ namespace validatingFormSubmission
             // Add framework services.
             services.AddMvc();
             services.AddSession();
+            services.Configure<MySqlOptions>(Configuration.GetSection("DBInfo"));
+            services.AddScoped<DbConnector>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -23,6 +27,16 @@ namespace validatingFormSubmission
             app.UseStaticFiles();
             app.UseSession();
             app.UseMvc();
+        }
+
+        public IConfiguration Configuration { get; private set; }
+        public Startup(IHostingEnvironment env)
+        {
+            var builder = new ConfigurationBuilder()
+            .SetBasePath(env.ContentRootPath)
+            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+            .AddEnvironmentVariables();
+            Configuration = builder.Build();
         }
     }
 }

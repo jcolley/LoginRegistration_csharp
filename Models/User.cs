@@ -1,17 +1,17 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace validatingFormSubmission.Models
+namespace LoginRegistration.Models
 {
     public abstract class BaseEntity{}
     public class User : BaseEntity
     {
         [Required]
-        [MinLength(4)]
+        [MinLength(2)]
         [Display(Name = "First Name")]
         public string FirstName {get;set;}
 
         [Required]
-        [MinLength(4)]
+        [MinLength(2)]
         [Display(Name = "Last Name")]
         public string LastName {get;set;}
 

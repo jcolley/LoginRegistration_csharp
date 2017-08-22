@@ -4,12 +4,19 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
-using validatingFormSubmission.Models;
+using LoginRegistration.Models;
 
-namespace validatingFormSubmission.Controllers
+namespace LoginRegistration.Controllers
 {
-    public class FormValidationController : Controller
+    public class LoginRegistrationController : Controller
     {
+        private readonly DbConnector _dbConnector;
+
+        public LoginRegistrationController(DbConnector connect)
+        {
+            _dbConnector = connect;
+        }
+
         // GET: /Home/
         [HttpGet]
         [Route("")]
@@ -24,6 +31,9 @@ namespace validatingFormSubmission.Controllers
         {
             if(ModelState.IsValid)
             {
+                string q = $"INSERT INTO Users (first_name, last_name, age, email, password) VALUES('{model.FirstName}','{model.LastName}','{model.Age}','{model.Email}','{model.Password}')";
+                _dbConnector.Query(q);
+
                 return View("addUser");
             } else {
                 ViewBag.errors = ModelState.Values;
